@@ -1,0 +1,270 @@
+1)CRC
+
+import java.io.*; class Crc 
+{    public static void main(String args[]) throws IOException    {   
+ 
+    BufferedReader br=new BufferedReader(new InputStreamReader(System.in)); 
+    int[ ] data;     int[ ]div;     int[ ]divisor; 
+    int[ ]rem;     int[ ]crc; 
+    int data_bits, divisor_bits, tot_length; 
+ 
+    System.out.println("Enter number of data bits : "); 
+    data_bits=Integer.parseInt(br.readLine());     data=new int[data_bits]; 
+       System.out.println("Enter data bits : ");     for(int i=0; i<data_bits; i++) 
+    data[i]=Integer.parseInt(br.readLine());      
+    System.out.println("Enter number of bits in divisor : ");      divisor_bits=Integer.parseInt(br.readLine());      divisor=new int[divisor_bits]; 
+ 
+    System.out.println("Enter Divisor bits : "); 
+    for(int i=0; i<divisor_bits; i++) 
+
+  
+    divisor[i]=Integer.parseInt(br.readLine()); 
+ 
+  
+         tot_length=data_bits+divisor_bits-1;      div=new int[tot_length]; 
+      rem=new int[tot_length];     crc=new int[tot_length]; 
+ 
+    for(int i=0;i<data.length;i++)       div[i]=data[i]; 
+ 
+      System.out.print("Dividend (after appending 0's) are : "); 
+      for(int i=0; i<div.length; i++)            System.out.print(div[i]);       System.out.println(); 
+     for(int j=0; j<div.length; j++)            { 
+                  rem[j] = div[j];            } 
+ 
+   rem=divide(div, divisor, rem);    for(int i=0;i<div.length;i++) 
+ 
+   {          crc[i]=(div[i]^rem[i]);    } 
+    System.out.println();     System.out.println("CRC code : "); 
+    for(int i=0;i<crc.length;i++)     System.out.print(crc[i]);     System.out.println(); 
+     
+          System.out.println("Enter CRC code of "+tot_length+" bits : "); 
+   for(int i=0; i<crc.length; i++)    crc[i]=Integer.parseInt(br.readLine()); 
+ 
+   for(int j=0; j<crc.length; j++)    { 
+      rem[j] = crc[j];    } 
+    rem=divide(crc, divisor, rem);     for(int i=0; i<rem.length; i++)     { 
+           if(rem[i]!=0)           { 
+                System.out.println("Error");                 break;           } 
+         if(i==rem.length-1)          System.out.println("No Error"); 
+    }   } 
+ 
+static int[] divide(int div[],int divisor[], int rem[]) { 
+     int cur=0;      while(true)     { 
+       for(int i=0;i<divisor.length;i++)        rem[cur+i]=(rem[cur+i]^divisor[i]); 
+       while(rem[cur]==0 && cur!=rem.length-1)        cur++; 
+ 
+      if((rem.length-cur)<divisor.length)  
+      break; 
+   }      return rem; 
+ }
+}
+
+2)bellman
+
+import java.util.Scanner; 
+ public class BellmanFord 
+{ 
+    private int distances[ ]; 
+    private int numberofvertices; 
+    public static final int MAX_VALUE = 999; 
+  
+    public BellmanFord(int numberofvertices) 
+    { 
+        this.numberofvertices = numberofvertices; 
+        distances = new int[numberofvertices + 1]; 
+    } 
+  
+    public void BellmanFordEvaluation(int source, int adjacencymatrix[ ][ ]) 
+    { 
+        for (int node = 1; node <= numberofvertices; node++) 
+        { 
+            distances[node] = MAX_VALUE; 
+        } 
+        
+       distances[source] = 0; 
+        
+       for (int node = 1; node <= numberofvertices - 1; node++) 
+        { 
+            for (int sourcenode = 1; sourcenode <= numberofvertices; sourcenode++) 
+            { 
+
+ 
+                for (int destinationnode = 1; destinationnode <= numberofvertices; destinationnode++) 
+             { 
+               if (adjacencymatrix[sourcenode][destinationnode] != MAX_VALUE) 
+               { 
+ if (distances[destinationnode] > distances[sourcenode] + adjacencymatrix[sourcenode][destinationnode]) 
+{ 
+distances[destinationnode] = distances[destinationnode] + adjacencymatrix[sourcenode][destinationnode]); 
+}  
+                 } 
+               } 
+         } 
+    } 
+        
+        for (int vertex = 1; vertex <= numberofvertices; vertex++) 
+        { 
+             System.out.println("distance of source  " + source + " to "+ vertex + " is " +  distances[vertex]); 
+        } 
+    } 
+  
+    public static void main(String[ ] args) 
+    { 
+        int numberofvertices = 0; 
+        int source, destination; 
+        Scanner scanner = new Scanner(System.in); 
+        System.out.println("Enter the number of vertices"); 
+        numberofvertices = scanner.nextInt(); 
+        int adjacencymatrix[ ][ ] = new int[numberofvertices + 1][numberofvertices + 1]; 
+        System.out.println("Enter the adjacency matrix"); 
+        for (int sourcenode = 1; sourcenode <= numberofvertices; sourcenode++) 
+        { 
+            for (int destinationnode = 1; destinationnode <= numberofvertices; destinationnode++) 
+
+ 
+            { 
+                adjacencymatrix[sourcenode][destinationnode] = scanner.nextInt(); 
+                if (sourcenode == destinationnode) 
+                { 
+                    adjacencymatrix[sourcenode][destinationnode] = 0; 
+                    continue; 
+                } 
+                
+                if (adjacencymatrix[sourcenode][destinationnode] == 0) 
+                { 
+                       adjacencymatrix[sourcenode][destinationnode] = MAX_VALUE; 
+                } 
+            } 
+        } 
+                 System.out.println("Enter the source vertex"); 
+                 source = scanner.nextInt(); 
+                 BellmanFord bellmanford = new BellmanFord(numberofvertices); 
+                 bellmanford.BellmanFordEvaluation(source,adjacencymatrix); 
+                 scanner.close();      
+     }    
+}
+
+3)tcp/ip
+
+import java.net.*; 
+import java.io.*; 
+public class ContentsClient 
+{ 
+public static void main( String args[ ] ) throws Exception { 
+Socket sock = new Socket(“127.0.0.1", 4000); 
+// reading the file name from keyboard. Uses input stream      
+System.out.print("Enter the file name"); 
+BufferedReader keyRead = new BufferedReader(new InputStreamReader(System.in)); 
+String fname = keyRead.readLine(); 
+ 
+// sending the file name to server. Uses PrintWriter 
+OutputStream ostream = sock.getOutputStream( ); 
+PrintWriter pwrite = new PrintWriter(ostream, true); 
+pwrite.println(fname); 
+ 
+// receiving the contents from server. Uses input stream 
+InputStream istream = sock.getInputStream(); 
+ 
+BufferedReader socketRead = new BufferedReader(new InputStreamReader(istream)); 
+ 
+String str; 
+while((str = socketRead.readLine()) != null) // reading line-by-line 
+{ 
+System.out.println(str); 
+} 
+pwrite.close(); 
+socketRead.close(); 
+
+keyRead.close(); 
+} 
+} 
+ 
+Server Program 
+import java.net.*; 
+import java.io.*; 
+public class ContentsServer 
+{ 
+public static void main(String args[]) throws Exception { 
+ 
+// establishing the connection with the server 
+ServerSocket sersock = new ServerSocket(4000); 
+System.out.println("Server ready for 
+connection"); 
+ 
+Socket sock = sersock.accept(); // binding with port: 4000 
+System.out.println("Connection is successful and wating for client request"); 
+ 
+// reading the file name from client 
+InputStream istream = sock.getInputStream( 
+); 
+BufferedReader fileRead =new BufferedReader(new 
+InputStreamReader(istream)); String fname = fileRead.readLine( ); 
+ 
+// reading file contents 
+ 
+BufferedReader contentRead = new BufferedReader(new FileReader(fname) ); 
+ 
+ 
+// keeping output stream ready to send the contents 
+OutputStream ostream = sock.getOutputStream( ); 
+PrintWriter pwrite = new PrintWriter(ostream, true); 
+ 
+String str; 
+ 
+while((str = contentRead.readLine()) != null) // reading line-by-line from file 
+{ 
+ 
+pwrite.println(str); // sending each line to client 
+} 
+ 
+sock.close(); sersock.close(); // closing network sockets  
+pwrite.close(); fileRead.close(); contentRead.close(); 
+} 
+}
+
+4)Datagram
+
+import java.io.*; import java.net.*; 
+public class Sender  {      public static void main(String[] args) throws IOException  
+   {        InetAddress addr = InetAddress.getByName(args[0]); 
+       byte[] buf = args[1].getBytes();        DatagramPacket packet = new DatagramPacket(buf, buf.length, addr, 4444);        DatagramSocket socket = new DatagramSocket(); 
+       socket.send(packet);    } 
+} 
+ 
+Receiver.java 
+import java.io.*; 
+import java.net.*; public class Receiver  { 
+    public static void main(String[] args) throws IOException     {      DatagramSocket socket = new DatagramSocket(4444); 
+     byte[] buf = new byte[256];      DatagramPacket packet = new DatagramPacket(buf, buf.length); 
+     System.out.println("Waiting ...");      socket.receive(packet); 
+ 
+ 
+     String s = new String(packet.getData(), 0, packet.getLength());      System.out.println(packet.getAddress().getHostName() + ": " + s); 
+  } }
+
+5)RSA
+
+import  java.math.BigInteger; import  java.util.*; class rsa {  public static void main(String args[])  {      Scanner ip=new Scanner(System.in);      int p,q,n,e=1,j;      int d=1,i1;      int t1,t2;      int pt[]= new int[10];      int ct[]= new int[10];      int rt[]= new int[10];      int temp[]= new int[10];      String i=new String();         System.out.println("Enter the two prime numbers:");      p=ip.nextInt();      q=ip.nextInt();         System.out.println("Enter the message to be sent");      i=ip.next();      i1=i.length();      n=p*q;      t1=p-1;      t2=q-1;   
+ 
+ 
+        System.out.println("\n----------------------"); 
+ 
+        System.out.println("Sender Side:");         while((t1*t2)%e==0)         {              e++;         }         System.out.println("Public Key(e)= "+e);         System.out.println("----------------------");         for(j=0;j<i1;j++)        {     pt[j]=(i.charAt(j))-96;  //    System.out.println("Plain Text= "+pt[j]);     ct[j]=((int)Math.pow(pt[j],e))%n;             System.out.println("Cipher Text= "+ct[j]);        }             System.out.println("\nTransmitted Message:");             for(j=0;j<i1;j++)            {                 temp[j]=ct[j]+96;                 System.out.print((char)temp[j]);            } 
+ 
+            System.out.println("\n\n----------------------");             System.out.println("Receiver Side:");             while((d*e)%(t1*t2)!=1)            {                d++;            }                      System.out.println("Private Key(d)= "+d);         System.out.println("----------------------"); 
+ 
+       for(j=0;j<i1;j++)       {   
+ 
+ 
+   //System.out.println("cipher Text= "+ct[j]);       BigInteger very_big_no = BigInteger.valueOf(ct[j]);       very_big_no = very_big_no.pow(d);       very_big_no = very_big_no.mod(BigInteger.valueOf(n));       rt[j] = very_big_no.intValue();               System.out.println("Plain Text= "+rt[j]);      }               System.out.println("\n----------------------");               System.out.println("Decrypted Message:");               for(j=0;j<i1;j++)              {                  rt[j]=rt[j]+96;                 System.out.print((char)rt[j]);              }                 System.out.println("\n----------------------");                 ip.close();    } } 
+
+6)Leakybucket
+
+Import java.util.Scanner; 
+ 
+public class LeakyBucket { 
+ 
+  Public static void main(String[] args) throws InterruptionException { 
+ 
+  Int n, incoming, outgoing, store=0, bucketsize;    Scanner scan = new Scanner(system.in);   System.out.println(“Enter bucket size, outgoing rate, number of inputs and incoming size);   bucketsize = scan.nextInt();   outgoing = scan.nextInt();   n = scan.nextInt();          Incoming = scan.nextInt();    while(n!=0)      {          System.out.println(“Incoming size is “ + incoming);          if(incoming <= (bucketsize-store))           {               store+= incoming;               System.out.println(“Bucket buffer size is  “ + store +” out of “ + bucketzise);            }            else            {               System.out.println(“Packet loss : “ + (incoming-(bucketsize-size)));               store=bucketsize;               System.out.println(“Bucket buffer size is  “ + store +” out of “ + bucketzise);              }             store-=outgoing;              System.out.println(“After outgoing: “ + store + “ packets left out of “ + bucketsize + “ in buffer);               n—;              Thread.sleep(3000);      }          scan.close(); } }      
+ 
